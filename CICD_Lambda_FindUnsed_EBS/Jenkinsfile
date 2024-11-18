@@ -1,0 +1,15 @@
+pipeline{
+    agent any
+    environment{
+        AWS_REGION = ""
+        S3_BUCKET = ""
+        LAMBDA_FUNCTION_NAME = ""
+    }
+    stages{
+        stage('Git CheckOut'){
+            steps{
+                
+            }
+        }
+    }
+}
