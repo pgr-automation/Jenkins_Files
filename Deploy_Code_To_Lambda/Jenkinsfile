@@ -23,7 +23,12 @@ pipeline{
         stage('Zip Code') {
             steps {
                 // Create a deployment package
-                sh 'zip -r deployment-package.zip *'
+                sh """
+                ls -lrth 
+                zip -r  deployment-package.zip *.py *.txt
+                ls -lrth 
+                gzip deployment-package.zip
+                """
             }
         }
 
