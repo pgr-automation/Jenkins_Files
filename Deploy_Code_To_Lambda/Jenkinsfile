@@ -30,8 +30,8 @@ pipeline{
         stage('Upload to S3'){
             steps{
                 withVault([vaultSecrets: [[path:'secret/data/awscredsadmin', secretValues:[
-                    [envVar: 'AWS_ACCESS_KEY_ID', vaultkey: 'aws_access_key_id'],
-                    [envVar: 'AWS_SECRET_ACCESS_KEY', vaultkey: 'aws_secret_access_key']
+                    [envVar: 'AWS_ACCESS_KEY_ID', vaultKey: 'aws_access_key_id'],
+                    [envVar: 'AWS_SECRET_ACCESS_KEY', vaultKey: 'aws_secret_access_key']
                 ]]]]){
 
                     echo '$AWS_ACCESS_KEY_ID'
