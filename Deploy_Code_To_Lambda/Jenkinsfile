@@ -27,7 +27,7 @@ pipeline{
                 ls -lrth 
                 zip  deployment-package.zip *.py *.txt
                 ls -lrth 
-                guzip deployment-package.zip
+                gunip deployment-package.zip
                 """
             }
         }
