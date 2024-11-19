@@ -2,7 +2,7 @@ pipeline{
     agent any
     environment{
         AWS_REGION = "us-east-1"
-        S3_BUCKET = "/pgrlambdafunction"
+        S3_BUCKET = "pgrlambdafunction"
         LAMBDA_FUNCTION_NAME = "root_login_detection"
     }
     stages{
