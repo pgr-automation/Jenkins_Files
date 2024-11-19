@@ -8,7 +8,7 @@ pipeline{
     stages{
         stage('Git CheckOut'){
             steps{
-                 git branch: 'main', url: 'https://github.com/pgr-automation/Lambda_Functions.git'
+                 git branch: 'main', credentialsId: 'GitLab-credentials', url: 'http://192.168.1.120/root/root_login_detect.git'
             }
         }
         stage('Install Dependencies') {
