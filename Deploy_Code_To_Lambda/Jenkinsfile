@@ -1,9 +1,9 @@
 pipeline{
     agent any
     environment{
-        AWS_REGION = ""
-        S3_BUCKET = ""
-        LAMBDA_FUNCTION_NAME = ""
+        AWS_REGION = "us-east-1"
+        S3_BUCKET = "/pgrlambdafunction"
+        LAMBDA_FUNCTION_NAME = "root_login_detection"
     }
     stages{
         stage('Git CheckOut'){
@@ -18,6 +18,30 @@ pipeline{
                 touch requirements.txt
                 pip install -r requirements.txt -t .
                 """
+            }
+        }
+        stage('Zip Code') {
+            steps {
+                // Create a deployment package
+                sh 'zip -r deployment-package.zip *'
+            }
+        }
+
+        stage('Upload to S3'){
+            steps{
+                witVault([vaultSecrets: [[path:'secret/data/awscredsadmin', secretValues:[
+                    [envVar: 'AWS_ACCESS_KEY_ID', vaultkey: 'aws_access_key_id'],
+                    [envVar: 'AWS_SECRET_ACCESS_KEY', vaultkey: 'aws_secret_access_key']
+                ]]]]){
+
+                    withAWS(region: 'us-east-1', credentials: 'aws-creds'){
+                        sh """
+                        aws s3 cp deployment-package.zip s3://${S3_BUCKET}/${LAMBDA_FUNCTION_NAME}/deployment-package.zip
+
+                        """
+                    }
+                }
+
             }
         }
     }
