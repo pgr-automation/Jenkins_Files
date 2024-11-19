@@ -25,9 +25,9 @@ pipeline{
                 // Create a deployment package
                 sh """
                 ls -lrth 
-                zip -r  deployment-package.zip *.py *.txt
+                zip  deployment-package.zip *.py *.txt
                 ls -lrth 
-                gzip deployment-package.zip
+                guzip deployment-package.zip
                 """
             }
         }
