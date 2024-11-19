@@ -34,9 +34,6 @@ pipeline{
                     [envVar: 'AWS_SECRET_ACCESS_KEY', vaultKey: 'aws_secret_access_key']
                 ]]]]){
 
-                    echo $AWS_ACCESS_KEY_ID
-                    echo $AWS_SECRET_ACCESS_KEY
-
                     withAWS(region: 'us-east-1', credentials: 'aws-creds'){
                         sh """
                         aws s3 cp deployment-package.zip s3://${S3_BUCKET}/${LAMBDA_FUNCTION_NAME}/deployment-package.zip
