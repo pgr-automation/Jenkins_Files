@@ -14,7 +14,10 @@ pipeline{
         stage('Install Dependencies') {
             steps {
                 // Install dependencies (if using Python)
-                sh 'pip install -r requirements.txt -t .'
+                sh"""
+                touch requirements.txt
+                pip install -r requirements.txt -t .
+                """
             }
         }
     }
