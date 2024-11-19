@@ -8,7 +8,13 @@ pipeline{
     stages{
         stage('Git CheckOut'){
             steps{
-                
+                 git branch: 'main', url: 'https://github.com/pgr-automation/Lambda_Functions.git'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                // Install dependencies (if using Python)
+                sh 'pip install -r requirements.txt -t .'
             }
         }
     }
