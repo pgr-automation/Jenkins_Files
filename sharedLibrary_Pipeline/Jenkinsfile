@@ -41,11 +41,6 @@ pipeline {
                 )
             }
         }
-
-
-        
-        
-
         // Other stages can go here...
     }
     post {
