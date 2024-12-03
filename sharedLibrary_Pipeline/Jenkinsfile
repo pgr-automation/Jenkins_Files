@@ -22,15 +22,14 @@ pipeline {
                 )
             }
         }
-        stage('Generate Code Coverage Report') {
+        
+        stage('Generate and Publish Coverage Report') {
             steps {
-                echo 'Generating JaCoCo coverage report...'
-                sh """
-                cd spring-bootapp
-                mvn verify
-                """
+                // Call the shared library method to generate and publish the coverage report
+                generateAndPublishCoverageReport('spring-bootapp')  // Pass the project directory if needed
             }
         }
+    
 
         stage('SonarQube analysis') {
             steps {
