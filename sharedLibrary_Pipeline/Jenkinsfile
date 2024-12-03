@@ -1,0 +1,40 @@
+@Library('pgr_automation_libraries') _  // Import the shared library
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Git Check Out') {
+            steps {
+                gitCheckout(
+                    branch: 'main',  // Specify the branch to check out
+                    credentialsId: '28059df9-d0e4-49f6-9da6-e410f9470aff',  // Specify the credentials ID
+                    repoUrl: 'https://github.com/pgr-automation/CICD_spring_boot.git'  // Specify the repository URL
+                )
+            }
+        }
+        stage('Build & Test') {
+            steps {
+                buildAndTest(
+                    appDirectory: 'spring-bootapp',  // Custom application directory
+                    mavenOptions: '--add-opens java.base/java.lang=ALL-UNNAMED',  // Custom Maven options
+                    skipTests: false  // Set to true to skip tests
+                )
+            }
+        }
+        stage('SonarQube analysis') {
+            steps {
+                sonarQubeAnalysis(
+                    projectKey: 'CICD-Spring-Boot',  // Specify the SonarQube project key
+                    appDirectory: 'spring-bootapp',  // Specify the directory where the app resides
+                    projectName: 'demo',
+                    vaultPath: 'secret/data/sonarcred'
+                )
+            }
+        }
+        
+        
+
+        // Other stages can go here...
+    }
+}
