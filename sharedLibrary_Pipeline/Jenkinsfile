@@ -25,10 +25,13 @@ pipeline {
         stage('Generate Code Coverage Report') {
             steps {
                 echo 'Generating JaCoCo coverage report...'
-                sh 'mvn verify'
+                sh """
+                cd spring-bootapp
+                mvn verify
+                """
             }
         }
-        
+
         stage('SonarQube analysis') {
             steps {
                 sonarQubeAnalysis(
