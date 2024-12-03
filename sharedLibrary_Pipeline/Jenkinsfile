@@ -27,7 +27,7 @@ pipeline {
                 sonarQubeAnalysis(
                     projectKey: 'CICD-Spring-Boot',  // Specify the SonarQube project key
                     appDirectory: 'spring-bootapp',  // Specify the directory where the app resides
-                    projectName: 'demo',
+                    projectName: 'spring_boot_app',
                     vaultPath: 'secret/data/sonarcred'
                 )
             }
