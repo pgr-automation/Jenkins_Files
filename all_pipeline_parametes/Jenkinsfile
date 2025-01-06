@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    environment {
+        // Defining environment variables
+        ENV_VAR1 = 'value1'                // Simple variable
+        ENV_VAR2 = "defaultValue-${params.STRING_PARAM}" // Using parameters within environment variables
+    }
+
     parameters {
         string(name: 'STRING_PARAM', defaultValue: 'defaultString', description: 'This is a string parameter')
         booleanParam(name: 'BOOLEAN_PARAM', defaultValue: true, description: 'This is a boolean parameter')
@@ -13,17 +19,22 @@ pipeline {
     }
 
     stages {
-        stage('Display Parameters') {
+        stage('Display Environment and Parameters') {
             steps {
                 script {
+                    // Accessing parameters
                     echo "String Parameter: ${params.STRING_PARAM}"
                     echo "Boolean Parameter: ${params.BOOLEAN_PARAM}"
                     echo "Choice Parameter: ${params.CHOICE_PARAM}"
                     echo "Text Parameter: ${params.TEXT_PARAM}"
                     echo "Password Parameter: ${params.PASSWORD_PARAM}"
-                    echo "File Parameter: ${params.FILE_PARAM}"
+                    echo "File Parameter Path: ${params.FILE_PARAM}" // Path to uploaded file
                     echo "Run Parameter: ${params.RUN_PARAM}"
                     echo "Credentials Parameter: ${params.CREDENTIALS_PARAM}"
+
+                    // Accessing environment variables
+                    echo "Environment Variable ENV_VAR1: ${env.ENV_VAR1}"
+                    echo "Environment Variable ENV_VAR2: ${env.ENV_VAR2}"
                 }
             }
         }
