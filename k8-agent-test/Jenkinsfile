@@ -1,0 +1,78 @@
+@Library('pgr_automation_libraries') _
+
+pipeline {
+    agent {
+        kubernetes {
+            label 'k8-jenkins'
+            defaultContainer 'jnlp'
+            yaml kubernetesAgent("http://192.168.1.120:8070")
+        }
+    }
+    stages {
+        stage('Approve Scripts') {
+            steps {
+                script {
+                    // Call the approveScripts function with the method name to be approved
+                    approveScripts('java.lang.Runtime.exec')
+                }
+            }
+        }
+        stage('Git Check Out') {
+            steps {
+                gitCheckout(
+                    branch: 'main',  // Specify the branch to check out
+                    credentialsId: '28059df9-d0e4-49f6-9da6-e410f9470aff',  // Specify the credentials ID
+                    repoUrl: 'https://github.com/pgr-automation/CICD_spring_boot.git'  // Specify the repository URL
+                )
+            }
+        }
+        stage('Build & Test') {
+            steps {
+                script {
+                    container('maven') {
+                    // Check if the directory exists before trying to cd into it
+                    if (fileExists('spring-bootapp')) {
+                        dir('spring-bootapp') {
+                            buildAndTest(
+                                appDirectory: '.',  // Current directory is now spring-bootapp
+                                mavenOptions: '--add-opens java.base/java.lang=ALL-UNNAMED',  // Custom Maven options
+                                skipTests: false  // Set to true to skip tests
+                            )
+                        }
+                    } else {
+                        error "Directory 'spring-bootapp' does not exist"
+                      }
+                    }
+                }
+            }
+        }
+        stage('Generate and Publish Coverage Report') {
+            steps {
+                script {
+                    container('maven'){
+                        // Call the shared library method to generate and publish the coverage report
+                        generateAndPublishCoverageReport('spring-bootapp')  // Pass the project directory if needed
+                    }
+                }
+            }
+                
+        }
+        stage('SonarQube analysis') {
+            steps {
+                script {
+                    container('maven'){
+                        //input 'Approve ?'
+                        sonarQubeAnalysis(
+                        projectKey: 'CICD-Spring-Boot',  // Specify the SonarQube project key
+                        appDirectory: 'spring-bootapp',  // Specify the directory where the app resides
+                        projectName: 'spring_boot_app',
+                        vaultPath: 'secret/data/sonarcred'
+                        )
+                    }
+                }
+                
+                
+            }
+        }
+    }
+}
