@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    parameters {
+        // String Parameter
+        string(name: 'STRING_PARAM', defaultValue: 'defaultString', description: 'This is a string parameter')
+
+        // Boolean Parameter
+        booleanParam(name: 'BOOLEAN_PARAM', defaultValue: true, description: 'This is a boolean parameter')
+
+        // Choice Parameter
+        choice(name: 'CHOICE_PARAM', choices: ['Option1', 'Option2', 'Option3'], description: 'This is a choice parameter')
+
+        // Text Parameter
+        text(name: 'TEXT_PARAM', defaultValue: 'Default text', description: 'This is a text parameter')
+
+        // Password Parameter
+        password(name: 'PASSWORD_PARAM', description: 'This is a password parameter')
+
+        // File Parameter
+        file(name: 'FILE_PARAM', description: 'This is a file parameter')
+
+        // Run Parameter
+        run(name: 'RUN_PARAM', description: 'Select a specific run of another job', job: 'example-job-name')
+
+        // Credentials Parameter (requires credentials plugin)
+        credentials(name: 'CREDENTIALS_PARAM', description: 'This is a credentials parameter')
+
+        // Multi-line String Parameter (requires a plugin, such as "Extended Choice Parameter")
+        extendedChoice(name: 'MULTI_STRING_PARAM', description: 'Multi-line string parameter', type: 'Textarea', value: 'Line1\nLine2\nLine3')
+
+        // Active Choices Parameter (requires Active Choices Plugin)
+        activeChoiceParam(name: 'ACTIVE_CHOICE_PARAM') {
+            description('This is an active choice parameter')
+            script {
+                return ['Dynamic Option 1', 'Dynamic Option 2', 'Dynamic Option 3']
+            }
+        }
+    }
+
+    stages {
+        stage('Display Parameters') {
+            steps {
+                script {
+                    echo "String Parameter: ${params.STRING_PARAM}"
+                    echo "Boolean Parameter: ${params.BOOLEAN_PARAM}"
+                    echo "Choice Parameter: ${params.CHOICE_PARAM}"
+                    echo "Text Parameter: ${params.TEXT_PARAM}"
+                    echo "Password Parameter: ${params.PASSWORD_PARAM}"
+                    echo "File Parameter: ${params.FILE_PARAM}" // This will be a path to the uploaded file
+                    echo "Run Parameter: ${params.RUN_PARAM}"
+                    echo "Credentials Parameter: ${params.CREDENTIALS_PARAM}"
+                }
+            }
+        }
+    }
+}
